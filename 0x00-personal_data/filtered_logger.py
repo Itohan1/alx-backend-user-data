@@ -12,7 +12,6 @@ def filter_datum(fields: List[str],
                  redaction: str, message: str, separator: str) -> str:
     """A logged message"""
 
-    pattern = rf"""({re.escape(field) for field in fields
-    }){re.escape(separator)}[^;]*"""
-    return re.sub(pattern, lambda match: f"""
-            {match.group(1)}{separator}{redaction}""", message)
+    for field in fields:
+        pattern = pattern = rf'({field}={separator}?)\S+'
+    return re.sub(pattern, rf'\1{redaction}', message)
