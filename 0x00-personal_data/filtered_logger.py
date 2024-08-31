@@ -75,9 +75,10 @@ def get_db():
     PERSONAL_DATA_DB_HOST = environ.get(
             "PERSONAL_DATA_DB_HOST", "localhost")
     PERSONAL_DATA_DB_NAME = environ.get(
-            "PERSONAL_DATA_DB_NAME", "holberton")
+            "PERSONAL_DATA_DB_NAME", "")
     connect = mysql.connector.MySQLConnection(
             user=PERSONAL_DATA_DB_USERNAME,
+            port=3306,
             password=PERSONAL_DATA_DB_PASSWORD,
             host=PERSONAL_DATA_DB_HOST,
             database=PERSONAL_DATA_DB_NAME
