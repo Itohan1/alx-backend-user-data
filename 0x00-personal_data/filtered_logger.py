@@ -8,6 +8,7 @@ import re
 import csv
 from typing import List
 
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 patterns = {
     'collect': lambda x, y: r'(?P<field>{})=[^{}]*'.format('|'.join(x), y),
     'replace': lambda x: r'\g<field>={}'.format(x),
@@ -45,18 +46,6 @@ class RedactingFormatter(logging.Formatter):
                 self.fields, RedactingFormatter.REDACTION,
                 message, RedactingFormatter.SEPARATOR)
         return incoming
-
-
-def read_csv(file):
-    """Read the csv file"""
-
-    with open(file, 'r') as d_file:
-        reader = csv.reader(d_file)
-        for line in reader:
-            return line[0]
-
-
-PII_FIELDS = tuple(read_csv('user_data.csv'))
 
 
 def get_logger(self) -> logging.Logger:
