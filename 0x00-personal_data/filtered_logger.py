@@ -5,6 +5,7 @@
 """
 import logging
 import re
+import csv
 from typing import List
 
 patterns = {
@@ -44,3 +45,30 @@ class RedactingFormatter(logging.Formatter):
                 self.fields, RedactingFormatter.REDACTION,
                 message, RedactingFormatter.SEPARATOR)
         return incoming
+
+
+def read_csv(file):
+    """Read the csv file"""
+
+    with open(file, 'r') as d_file:
+        reader = csv.reader(d_file)
+        for line in reader:
+            return line[0]
+
+
+PII_FIELDS = tuple(read_csv('user_data.csv'))
+
+
+def get_logger(self) -> logging.Logger:
+    """
+        Function that takes no arguments
+        and returns a logging.Logger object
+    """
+
+    logger = logging.getLogger("user_data")
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.setLevel(logging.INFO, True)
+    logger.propagate = False
+    logger.addHandler(stream_handler)
+    return logger
