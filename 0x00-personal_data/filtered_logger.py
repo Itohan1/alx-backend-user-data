@@ -8,7 +8,7 @@ import re
 import csv
 from typing import List
 import mysql.connector
-from os import environ
+import os
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 patterns = {
@@ -68,14 +68,14 @@ def get_logger(self) -> logging.Logger:
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """Connect to secure database"""
 
-    PERSONAL_DATA_DB_USERNAME = environ.get(
+    PERSONAL_DATA_DB_USERNAME = os.getenv(
             "PERSONAL_DATA_DB_USERNAME", "root")
-    PERSONAL_DATA_DB_PASSWORD = environ.get(
+    PERSONAL_DATA_DB_PASSWORD = os.getenv(
             "PERSONAL_DATA_DB_PASSWORD", '')
-    PERSONAL_DATA_DB_HOST = environ.get(
+    PERSONAL_DATA_DB_HOST = os.getenv(
             "PERSONAL_DATA_DB_HOST", "localhost")
-    PERSONAL_DATA_DB_NAME = environ.get(
-            "PERSONAL_DATA_DB_NAME", "holberton")
+    PERSONAL_DATA_DB_NAME = os.getenv(
+            "PERSONAL_DATA_DB_NAME", "")
     connect = mysql.connector.connect(
             user=PERSONAL_DATA_DB_USERNAME,
             port=3306,
