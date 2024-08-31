@@ -51,7 +51,7 @@ class RedactingFormatter(logging.Formatter):
         return incoming
 
 
-def get_logger(self) -> logging.Logger:
+def get_logger() -> logging.Logger:
     """
         Function that takes no arguments
         and returns a logging.Logger object
@@ -85,3 +85,30 @@ def get_db() -> MySQLConnection:
     )
 
     return connect
+
+
+def main():
+    """
+        Obtain a database connection
+        using get_db and retrieve all
+        rows in the users table and display
+        each row under a filtered format
+    """
+
+    logger = get_logger()
+    fields = ["name", "email", "phone", "ssn", "password"]
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    for row in cursor:
+        message = "; ".join(
+                f"{field}={value}" for field, value in zip(
+                    fields + ["ip", "last_login", "user_agent"], row)
+                )
+        logger.info(message)
+    cursor.close()
+    db.close()
+
+
+if __name__ == "__main__":
+    main()
