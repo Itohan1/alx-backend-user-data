@@ -27,7 +27,14 @@ def stats() -> str:
 
 
 @app_views.route('/unauthorized', strict_slashes=False)
-def check_request() -> str:
+def check_request():
     """Error handler"""
 
     abort(401)
+
+
+@app_views.route('forbidden', strict_slashes=False)
+def handle_forbidden():
+    """End point for 403 handler"""
+
+    abort(403)
