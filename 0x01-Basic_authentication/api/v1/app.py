@@ -32,7 +32,7 @@ def request_unfound(error) -> str:
 def deny_access(error) -> str:
     """Response for error handler for failed authentication"""
 
-    return jsonify({"error": "Forbidden"})
+    return jsonify({"error": "Forbidden"}), 403
 
 
 if __name__ == "__main__":
