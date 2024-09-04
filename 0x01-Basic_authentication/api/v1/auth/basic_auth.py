@@ -72,7 +72,7 @@ class BasicAuth(Auth):
             ) -> TypeVar('User'):
         """Basic - User object"""
 
-        if user_email is None or not isinstance(user_pwd, str):
+        if not isinstance(user_email, str) or not isinstance(user_pwd, str):
             return None
 
         users = User.search({"email": user_email})
