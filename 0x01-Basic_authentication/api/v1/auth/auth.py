@@ -31,12 +31,12 @@ class Auth:
     def authorization_header(self, request=None) -> str:
         """Returns None - request"""
 
-        if request == None:
+        if request is None:
             return None
 
-        authorization = request.headers.get['Authorization']
+        authorization = request.headers.get('Authorization')
 
-        if not in authorization:
+        if not authorization:
             return None
 
         return authorization
