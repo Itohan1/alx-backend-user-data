@@ -33,7 +33,7 @@ class Auth:
                     if path == j[:-1]:
                         return False
 
-            return True
+        return True
 
     def authorization_header(self, request=None) -> str:
         """Returns None - request"""
