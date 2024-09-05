@@ -29,7 +29,7 @@ class SessionAuth(Auth):
         return session_id
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
-        """"""
+        """Get user id from session_id key"""
 
         if session_id is None:
             return None
