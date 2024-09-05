@@ -62,4 +62,4 @@ class Auth:
             return None
 
         if ses_check == "_my_session_id":
-            return request.headers.get('cookie_name')
+            return request.cookies.get(ses_check)
