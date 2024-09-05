@@ -26,6 +26,30 @@ else:
 
 
 @app.before_request
+def session_login():
+    """
+        Add the URL path /api/v1/auth_session/login/
+        in the list of excluded paths
+    """
+
+    excluded_paths = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/',
+            '/api/v1/forbidden/',
+            '/api/v1/auth_session/login/'
+    ]
+
+    if auth.require_auth(request.path, excluded_paths) is not True:
+        user = auth.current_user(request)
+    if auth.authorization_header(request) and auth.session_cookie(request):
+        abort(401)
+        return None
+    if user is None:
+        abort(404)
+    request.current_user = auth.current_user(request)
+
+
+@app.before_request
 def check_request():
     """Check request"""
 
@@ -51,7 +75,7 @@ def check_again():
         abort(401)
 
     if auth.current_user(request) is None:
-        abort(403)
+        abort(404)
 
 
 @app.errorhandler(404)
