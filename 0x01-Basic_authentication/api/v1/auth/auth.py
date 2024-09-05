@@ -28,7 +28,7 @@ class Auth:
                 if ano[3].find(check[3][:-1]) != -1:
                     return False
 
-            if check[-1] == "/":
+            if check[3][-1] == "/":
                 if path[-1] != "/":
                     if path == j[:-1]:
                         return False
