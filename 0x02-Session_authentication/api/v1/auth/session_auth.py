@@ -10,7 +10,12 @@ class SessionAuth(Auth):
     user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
-        """"""
+        """
+            The same user_id can have multiple
+            Session ID - indeed, the user_id
+            is the value in the dictionary
+            user_id_by_session_id
+        """
 
         if user_id is None or not isinstance(user_id, str):
             return None
