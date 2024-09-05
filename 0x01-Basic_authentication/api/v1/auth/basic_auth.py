@@ -96,10 +96,9 @@ class BasicAuth(Auth):
             the User instance for a request
         """
 
-        super.__init__()
-        self.autho = self.authorization_header(request)
-        self.d_base64 = self.extract_base64_authorization_header(self.autho)
-        self.decode = self.decode_base64_authorization_header(self.d_base64)
-        self.extract = self.extract_user_credentials(self.decode)
-        self.cre = user_object_from_credentials(extract)
-        return self.cre
+        autho = self.authorization_header(request)
+        d_base64 = self.extract_base64_authorization_header(autho)
+        decode = self.decode_base64_authorization_header(d_base64)
+        extract = self.extract_user_credentials(decode)
+        cre = user_object_from_credentials(extract)
+        return cre
