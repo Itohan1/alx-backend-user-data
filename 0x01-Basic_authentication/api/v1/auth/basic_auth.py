@@ -41,11 +41,10 @@ class BasicAuth(Auth):
         try:
             decoded = base64.b64decode(
                     base64_authorization_header, validate=True)
-
+            return decoded.decode('utf-8')
         except (base64.binascii.Error, ValueError):
             return None
 
-        return decoded.decode('utf-8')
 
     def extract_user_credentials(
             self, decoded_base64_authorization_header: str
@@ -60,11 +59,12 @@ class BasicAuth(Auth):
             return None, None
 
         check = decoded_base64_authorization_header.find(":")
+        seek = decoded_base64_authorization_header.split(":", 1)
+        new_decode = decoded_base64_authorization_header.find(":", check + 1)
 
         if check == -1:
             return None, None
 
-        seek = decoded_base64_authorization_header.split(":")
         return seek[0], seek[1]
 
     def user_object_from_credentials(
