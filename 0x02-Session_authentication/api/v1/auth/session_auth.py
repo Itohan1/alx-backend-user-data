@@ -44,16 +44,16 @@ class SessionAuth(Auth):
 
         from api.v1.views.users import User
 
-        user = User()
-        if not self.session_cookie(request):
-            return None
-
         session_id = self.session_cookie(request)
 
         if not session_id:
             return None
 
         user_id = self.user_id_for_session_id(session_id)
+        if not user_id:
+            return None
+
+        user = User.get(user_id)
         if not user:
             return None
 
