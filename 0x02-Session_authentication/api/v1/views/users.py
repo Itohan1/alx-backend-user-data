@@ -136,5 +136,4 @@ def use_me():
     """Check for me"""
     if request.current_user is None:
         abort(404)
-
     return jsonify(request.current_user.to_json())
