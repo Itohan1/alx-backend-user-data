@@ -8,8 +8,6 @@ from datetime import datetime, timedelta
 class SessionExpAuth(SessionAuth):
     """a class SessionExpAuth that inherits from SessionAuth"""
 
-    ses_dict = {}
-
     def __init__(self):
         """Assign an instance attribute session_duration"""
 
@@ -25,9 +23,10 @@ class SessionExpAuth(SessionAuth):
         if not check:
             return None
 
-        user_id = self.user_id_by_session_id[check]
-        self.ses_dict["user_id"] = user_id
-        self.ses_dict["created_at"] = datetime.now()
+        self.user_id_by_session_id[check] = {
+                "user_id": user_id,
+                "created_at": datetime.now()
+        }
         return check
 
     def user_id_for_session_id(self, session_id=None):
@@ -36,20 +35,21 @@ class SessionExpAuth(SessionAuth):
         if session_id is None:
             return None
 
-        if session_id not in self.user_id_by_session_id:
+        session_data = self.user_id_by_session_id.get(session_id)
+        if not session_data:
             return None
 
         if self.session_duration <= 0:
-            return self.ses_dict["user_id"]
+            return session_data.get("user_id")
 
-        if "created_at" not in self.ses_dict:
+        created_at = session_data.get("created_at")
+        if not created_at:
             return None
 
         date = datetime.now()
-        if self.session_duration > 0:
-            expire = self.ses_dict["created_at"] \
-                    + timedelta(seconds=self.session_duration)
-            if expire < date:
-                return None
+        expire = created_at \
+                + timedelta(seconds=self.session_duration)
+        if expire < date:
+            return None
 
-        return self.ses_dict["user_id"]
+        return session_data.get("user_id")
