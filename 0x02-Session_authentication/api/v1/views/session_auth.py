@@ -6,6 +6,7 @@
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 import os
+from typing import Tuple
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
@@ -47,7 +48,7 @@ def sess_first() -> str:
 @app_views.route(
         '/auth_session/logout', methods=['DELETE'],
         strict_slashes=False)
-def del_login():
+def del_login() -> Tuple[str, int]:
     """Destroy session"""
 
     from api.v1.app import auth
