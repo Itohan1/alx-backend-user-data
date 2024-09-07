@@ -36,7 +36,8 @@ def session_login():
             '/api/v1/status/',
             '/api/v1/unauthorized/',
             '/api/v1/forbidden/',
-            '/api/v1/auth_session/login/'
+            '/api/v1/auth_session/login/',
+            '/api/v1/users/me/'
     ]
 
     if auth and auth.require_auth(request.path, excluded_paths):
@@ -66,7 +67,8 @@ def check_again():
         return
 
     check_list = ['/api/v1/status/',
-                  '/api/v1/unauthorized/', '/api/v1/forbidden/', '/api/v1/auth_session/login/']
+                  '/api/v1/unauthorized/', '/api/v1/forbidden/',
+                  '/api/v1/auth_session/login/', '/api/v1/users/me/']
     if auth.require_auth(request.path, check_list) is not True:
         return
 

@@ -27,19 +27,18 @@ def sess_first() -> str:
     check_email = User.search({"email": e_details})
 
     if not check_email or len(check_email) == 0:
-        return jsonify({"error": "no user found for this email"}), 400
+        return jsonify({"error": "no user found for this email"}), 404
 
     user = check_email[0]
     check_valid = user.is_valid_password(p_details)
 
     if not check_valid:
-        return jsonify({"error": "wrong password"}), 404
+        return jsonify({"error": "wrong password"}), 401
 
     session_id = auth.create_session(user.id)
 
-    result = jsonify(user.to_json())
-
     name = os.getenv('SESSION_NAME')
+    result = jsonify(user.to_json())
     result.set_cookie(name, session_id)
 
     return result
