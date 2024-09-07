@@ -43,7 +43,10 @@ def sess_first() -> str:
 
     return result
 
-@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+
+@app_views.route(
+        '/auth_session/logout', methods=['DELETE'],
+        strict_slashes=False)
 def del_login():
     """Destroy session"""
 
@@ -53,4 +56,5 @@ def del_login():
     if destroy_session:
         abort(404)
         return False
+
     return jsonify({}), 200
