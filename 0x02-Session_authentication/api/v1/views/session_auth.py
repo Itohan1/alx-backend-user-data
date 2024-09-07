@@ -53,8 +53,7 @@ def del_login():
     from api.v1.app import auth
     destroy_session = auth.destroy_session(request)
 
-    if destroy_session:
+    if not destroy_session:
         abort(404)
-        return False
 
     return jsonify({}), 200
