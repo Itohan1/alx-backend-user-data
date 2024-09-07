@@ -135,5 +135,5 @@ def update_user(user_id: str = None) -> str:
 def use_me():
     """Check for me"""
     if request.current_user is None:
-        abort(404)
+        abort(403)
     return jsonify(request.current_user.to_json())
