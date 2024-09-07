@@ -20,6 +20,9 @@ if check == 'basic_auth':
 elif check == "session_auth":
     from api.v1.auth.session_auth import SessionAuth
     auth = SessionAuth()
+elif check == "session_exp_auth":
+    from api.v1.auth.session_exp_auth import SessionExpAuth
+    auth = SessionExpAuth()
 else:
     from api.v1.auth.auth import Auth
     auth = Auth()
@@ -38,7 +41,7 @@ def session_login():
             '/api/v1/forbidden/',
             '/api/v1/auth_session/login/',
             '/api/v1/users/me/',
-            '/api/v1/auth_session/logout/',
+            '/api/v1/auth_session/logout/'
     ]
 
     if auth and auth.require_auth(request.path, excluded_paths):
