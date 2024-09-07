@@ -42,3 +42,15 @@ def sess_first() -> str:
     result.set_cookie(name, session_id)
 
     return result
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def del_login():
+    """Destroy session"""
+
+    from api.v1.app import auth
+    destroy_session = auth.destroy_session(request)
+
+    if destroy_session:
+        abort(404)
+        return False
+    return jsonify({}), 200
