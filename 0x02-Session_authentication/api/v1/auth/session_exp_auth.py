@@ -1,80 +1,46 @@
-#!/usr/bin/env python3
-"""Create a class SessionAuth that inherits from Auth"""
-from api.v1.auth.auth import Auth
-import uuid
+from os import getenv
+from datetime import datetime, timedelta
+from api.v1.auth.session_auth import SessionAuth
 
+class SessionExpAuth(SessionAuth):
+    def __init__(self):
+        """Initialize with session duration"""
+        super().__init__()
+        try:
+            self.session_duration = int(getenv("SESSION_DURATION", 0))
+        except ValueError:
+            self.session_duration = 0
 
-class SessionExpAuth(Auth):
-    """Create a class SessionAuth that inherits from Auth"""
-
-    user_id_by_session_id = {}
-
-    def create_session(self, user_id: str = None) -> str:
-        """
-            The same user_id can have multiple
-            Session ID - indeed, the user_id
-            is the value in the dictionary
-            user_id_by_session_id
-        """
-
-        if user_id is None:
-            return None
-
-        if not isinstance(user_id, str):
-            return None
-
-        session_id = str(uuid.uuid4())
-        self.user_id_by_session_id[session_id] = user_id
-
-        return session_id
-
-    def user_id_for_session_id(self, session_id: str = None) -> str:
-        """Get user id from session_id key"""
-
-        if session_id is None:
-            return None
-
-        if not isinstance(session_id, str):
-            return None
-
-        return self.user_id_by_session_id.get(session_id)
-
-    def current_user(self, request=None):
-        """Get a User based on his session ID"""
-
-        from api.v1.views.users import User
-
-        session_id = self.session_cookie(request)
-
+    def create_session(self, user_id=None):
+        """Create a Session"""
+        session_id = super().create_session(user_id)
         if not session_id:
             return None
+        
+        self.user_id_by_session_id[session_id] = {
+            "user_id": user_id,
+            "created_at": datetime.now()
+        }
+        return session_id
 
-        user_id = self.user_id_for_session_id(session_id)
-        if not user_id:
-            return None
-
-        user = User.get(user_id)
-        if not user:
-            return None
-
-        return user
-
-    def destroy_session(self, request=None):
-        """Destroy the session"""
-
-        if request is None:
-            return False
-
-        session_id = self.session_cookie(request)
-
+    def user_id_for_session_id(self, session_id=None):
+        """Retrieve the user ID"""
         if session_id is None:
-            return False
+            return None
 
-        user_id = self.user_id_for_session_id(session_id)
+        session_data = self.user_id_by_session_id.get(session_id)
+        if not session_data:
+            return None
 
-        if user_id is None:
-            return False
+        if self.session_duration <= 0:
+            return session_data.get("user_id")
 
-        if session_id in self.user_id_by_session_id:
-            del self.user_id_by_session_id[session_id]
-        return True
+        created_at = session_data.get("created_at")
+        if not created_at:
+            return None
+
+        expire_time = created_at + timedelta(seconds=self.session_duration)
+        if expire_time < datetime.now():
+            return None
+
+        return session_data.get("user_id")
