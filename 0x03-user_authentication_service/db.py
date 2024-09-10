@@ -33,6 +33,8 @@ class DB:
     def add_user(self, email: str, hashed_password: str) -> User:
         """Add a user"""
 
+        if email or hashed_password is None:
+            return None
         try:
             new_user = User(email=email, hashed_password=hashed_password)
             self._session.add(new_user)
@@ -40,3 +42,5 @@ class DB:
         except Exception:
             self._session.rollback()
             new_user = None
+
+        return new_user
