@@ -9,7 +9,7 @@ app = Flask(__name__)
 def check_form():
     """Flask app that has a single GET route"""
 
-    return jsonify({})
+    return jsonify({"message": "Bienvenue"})
 
 
 if __name__ == "__main__":
