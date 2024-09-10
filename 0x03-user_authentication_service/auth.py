@@ -7,14 +7,15 @@ from sqlalchemy.orm.exc import NoResultFound
 
 
 def _hash_password(password: str) -> bytes:
-        """Takes in a password string arguments and returns bytes"""
+    """Takes in a password string arguments and returns bytes"""
 
-        salt = bcrypt.gensalt()
+    salt = bcrypt.gensalt()
 
-        hashed_password = bcrypt.hashpw(
-                password.encode('utf-8'), salt)
+    hashed_password = bcrypt.hashpw(
+            password.encode('utf-8'), salt)
 
-        return hashed_password
+    return hashed_password
+
 
 class Auth:
     """Auth class to interact with the authentication database.
