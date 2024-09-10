@@ -35,12 +35,20 @@ class DB:
 
         if email or hashed_password is None:
             return None
-        try:
+        new_user = User(email=email, hashed_password=hashed_password)
+        if self.__session is None:
+            DBSession = sessionmaker(bind=self._engine)
+            self.__session = DBSession()
+            self._session.add(new_user)
+            self._session.commit()
+        """
+            try:
             new_user = User(email=email, hashed_password=hashed_password)
             self._session.add(new_user)
             self._session.commit()
         except Exception:
             self._session.rollback()
             new_user = None
-
+        return new_user
+        """
         return new_user
