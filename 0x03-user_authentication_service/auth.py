@@ -91,7 +91,8 @@ class Auth:
             user = self._db.find_user_by(id=user_id)
             if user is None:
                 return None
-            user["session_id"] = None
-            return user["session_id"]
+            if hasattr(user, "session_id"):
+                setattr(user, session_id, None)
+            return user.session_id
         except NoResultFound:
             return None
