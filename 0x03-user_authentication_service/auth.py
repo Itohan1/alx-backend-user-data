@@ -92,6 +92,6 @@ class Auth:
             if user is None:
                 return None
             user["session_id"] = None
-            return None
+            return user["session_id"]
         except NoResultFound:
             return None
