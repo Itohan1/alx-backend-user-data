@@ -98,9 +98,9 @@ class Auth:
         try:
             user = self._db.find_user_by(email=email)
             if user is None:
-                raise ValueError()
+                raise ValueError
             new_id = _generate_uuid()
             self._db.update_user(user.id, reset_token=new_id)
             return user.reset_token
         except NoResultFound:
-            return None
+            user = None
