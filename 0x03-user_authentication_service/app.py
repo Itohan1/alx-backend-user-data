@@ -82,9 +82,11 @@ def reset_password():
 
     try:
         check_email = AUTH.get_reset_password_token(email)
-        return jsonify({"email": email, "reset_token": check_email})
     except ValueError:
+        check_email = None
+    if check_email is None:
         abort(403)
+    return jsonify({"email": email, "reset_token": check_email})
 
 
 if __name__ == "__main__":
