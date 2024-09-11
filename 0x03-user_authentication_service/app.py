@@ -65,6 +65,7 @@ def logout():
         AUTH.destroy_session(user.id)
         res = redirect(url_for('checkform'))
         res.set_cookie('session_id', '')
+        return res
     except Exception:
         abort(403)
 
